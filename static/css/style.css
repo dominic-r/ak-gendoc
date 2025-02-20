@@ -30,7 +30,7 @@
     max-width: var(--max-width);
   }
   
-  .generator-form,
+  #docsGeneratorForm,
   #outputSection {
     background-color: var(--form-bg);
     padding: 25px;
@@ -39,11 +39,23 @@
     margin-bottom: 30px;
   }
   
-  .generator-form h1,
-  #outputSection h2 {
-    margin-top: 0;
+  input, select, textarea {
+    width: 100%;
+  }
+  
+  details {
+    background-color: var(--form-bg);
+    padding: 15px;
+    border-radius: var(--radius);
     margin-bottom: 20px;
-    text-align: center;
+    border: 1px solid var(--border-color);
+  }
+  
+  details summary {
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 10px;
+    outline: none;
   }
   
   .input-group {
@@ -56,6 +68,10 @@
     margin-bottom: 8px;
     font-weight: 500;
     color: var(--label-color);
+  }
+  
+  .required {
+    color: red;
   }
   
   .input-group input,
@@ -88,6 +104,7 @@
     cursor: pointer;
     font-size: 16px;
     padding: 0;
+    margin-top: 10px;
   }
   
   .remove-btn {
@@ -99,10 +116,9 @@
     padding: 0 5px;
   }
   
-  .checkbox-group {
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
+  .input-group label input[type="checkbox"] {
+    margin-right: 5px;
+    vertical-align: middle;
   }
   
   button[type="submit"] {

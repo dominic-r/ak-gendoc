@@ -8,26 +8,24 @@
 </head>
 <body>
   <main>
-    <section class="generator-form">
-      <h1>authentik Integration Docs Generator</h1>
-      <form id="docsGeneratorForm" novalidate>
+    <form id="docsGeneratorForm" novalidate>
+      <!-- Basic Settings Section -->
+      <details open>
+        <summary>Basic Settings</summary>
         <div class="input-group">
-          <label for="integrationName">Integration Name *</label>
+          <label for="integrationName">Integration Name <span class="required">*</span></label>
           <input type="text" id="integrationName" name="integrationName" required />
         </div>
 
         <div class="input-group">
-          <label for="deploymentType">Deployment Type</label>
-          <select id="deploymentType" name="deploymentType">
-            <option value="company">Company</option>
-            <option value="saas">SAAS</option>
-          </select>
+          <label for="isSaas">
+            <input type="checkbox" id="isSaas" name="isSaas" />
+            SaaS Deployment (do not append <code>.company</code> to domain)
+          </label>
         </div>
 
         <div class="input-group">
-          <label for="integrationDomain">
-            Integration Domain Placeholder *
-          </label>
+          <label for="integrationDomain">Integration Domain <span class="required">*</span></label>
           <input type="text" id="integrationDomain" name="integrationDomain" required placeholder="service" />
         </div>
 
@@ -40,12 +38,12 @@
         </div>
 
         <div class="input-group">
-          <label for="description">Product Description *</label>
+          <label for="description">Product Description <span class="required">*</span></label>
           <textarea id="description" name="description" required></textarea>
         </div>
 
         <div class="input-group">
-          <label for="webLink">Website Link *</label>
+          <label for="webLink">Website Link <span class="required">*</span></label>
           <input type="url" id="webLink" name="webLink" required />
         </div>
 
@@ -57,10 +55,23 @@
         </div>
 
         <div class="input-group">
-          <label>Redirect URIs *</label>
+          <label for="isPublicClient">
+            <input type="checkbox" id="isPublicClient" name="isPublicClient" />
+            Public Client (no client secret)
+          </label>
+        </div>
+      </details>
+
+      <!-- Advanced Settings Section -->
+      <details open>
+        <summary>Advanced Settings</summary>
+        <div class="input-group">
+          <label>Redirect URIs <span class="required">*</span></label>
           <div id="redirectURIsContainer"></div>
           <button type="button" id="addRedirectURI" class="add-btn">+ Add Redirect URI</button>
-          <small>Enter the URI path that will be appended to the domain (if Company is chosen, <em>{integrationDomain}.company</em> will be used).</small>
+          <small>
+            Enter the URI path that will be appended to the domain. If not in SaaS mode, <code>.company</code> will be appended.
+          </small>
         </div>
 
         <div class="input-group">
@@ -70,14 +81,24 @@
           <small>If you want to add scopes other than "openid", "email", and "profile".</small>
         </div>
 
-        <div class="input-group checkbox-group">
-          <input type="checkbox" id="isPublicClient" name="isPublicClient" />
-          <label for="isPublicClient">Public Client (no client secret)</label>
+        <div class="input-group">
+          <label for="subjectMode">Subject Mode (optional)</label>
+          <select id="subjectMode" name="subjectMode">
+            <option value="">-- None --</option>
+            <option value="Based on the User's hashed ID">Based on the User's hashed ID</option>
+            <option value="Based on the User's ID">Based on the User's ID</option>
+            <option value="Based on the User's UUID">Based on the User's UUID</option>
+            <option value="Based on the User's username">Based on the User's username</option>
+            <option value="Based on the User's Email">Based on the User's Email</option>
+            <option value="Based on the User's UPN">Based on the User's UPN</option>
+          </select>
+          <small>Select the subject mode for the integration (optional).</small>
         </div>
+      </details>
 
-        <button type="submit">Generate Docs</button>
-      </form>
-    </section>
+      <button type="submit">Generate Docs</button>
+      <button type="button" id="shareConfig">Share Configuration</button>
+    </form>
 
     <section id="outputSection">
       <h2>Generated Markdown</h2>
@@ -85,6 +106,7 @@
     </section>
   </main>
 
+  <script src="static/js/sharedmgr.js"></script>
   <script src="static/js/script.js"></script>
 </body>
 </html>
