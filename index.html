@@ -1,138 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>authentik Integration Docs Generator</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f6f7;
-        }
-
-        .generator-form {
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #333;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        textarea {
-            height: 100px;
-            resize: vertical;
-        }
-
-        button {
-            background-color: #4299e1;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: #3182ce;
-        }
-
-        #output {
-            margin-top: 30px;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            white-space: pre-wrap;
-            font-family: monospace;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            width: auto;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>authentik Integration Docs Generator</title>
+  <link rel="stylesheet" href="static/css/style.css" />
 </head>
 <body>
-    <div class="generator-form">
-        <h1>authentik Integration Docs Generator</h1>
-        
+  <main>
+    <section class="generator-form">
+      <h1>authentik Integration Docs Generator</h1>
+      <form id="docsGeneratorForm" novalidate>
         <div class="input-group">
-            <label for="integrationName">Integration Name</label>
-            <input type="text" id="integrationName" required>
+          <label for="integrationName">Integration Name *</label>
+          <input type="text" id="integrationName" name="integrationName" required />
         </div>
 
         <div class="input-group">
-            <label for="integrationDomain">Integration Domain Placeholder</label>
-            <input type="text" id="integrationDomain" required 
-                   placeholder="service">
+          <label for="deploymentType">Deployment Type</label>
+          <select id="deploymentType" name="deploymentType">
+            <option value="company">Company</option>
+            <option value="saas">SAAS</option>
+          </select>
         </div>
 
         <div class="input-group">
-            <label for="supportLevel">Support Level</label>
-            <select id="supportLevel">
-                <option value="community">Community</option>
-                <option value="authentik">authentik</option>
-            </select>
+          <label for="integrationDomain">
+            Integration Domain Placeholder *
+          </label>
+          <input type="text" id="integrationDomain" name="integrationDomain" required placeholder="service" />
         </div>
 
         <div class="input-group">
-            <label for="description">Product Description</label>
-            <textarea id="description" required></textarea>
+          <label for="supportLevel">Support Level</label>
+          <select id="supportLevel" name="supportLevel">
+            <option value="community">Community</option>
+            <option value="authentik">authentik</option>
+          </select>
         </div>
 
         <div class="input-group">
-            <label for="webLink">Website Link</label>
-            <input type="url" id="webLink" required>
+          <label for="description">Product Description *</label>
+          <textarea id="description" name="description" required></textarea>
         </div>
 
         <div class="input-group">
-            <label for="providerType">Provider Type</label>
-            <select id="providerType">
-                <option value="oidc">OAuth2/OpenID Connect</option>
-            </select>
+          <label for="webLink">Website Link *</label>
+          <input type="url" id="webLink" name="webLink" required />
         </div>
 
         <div class="input-group">
-            <label for="callbackPath">Callback Path</label>
-            <input type="text" id="callbackPath" value="/oauth/callback">
+          <label for="providerType">Provider Type</label>
+          <select id="providerType" name="providerType">
+            <option value="oidc">OAuth2/OpenID Connect</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <label>Redirect URIs *</label>
+          <div id="redirectURIsContainer"></div>
+          <button type="button" id="addRedirectURI" class="add-btn">+ Add Redirect URI</button>
+          <small>Enter the URI path that will be appended to the domain (if Company is chosen, <em>{integrationDomain}.company</em> will be used).</small>
+        </div>
+
+        <div class="input-group">
+          <label>Additional Scopes</label>
+          <div id="scopesContainer"></div>
+          <button type="button" id="addScope" class="add-btn">+ Add Scope</button>
+          <small>If you want to add scopes other than "openid", "email", and "profile".</small>
         </div>
 
         <div class="input-group checkbox-group">
-            <input type="checkbox" id="isPublicClient">
-            <label for="isPublicClient">Public Client (no client secret)</label>
+          <input type="checkbox" id="isPublicClient" name="isPublicClient" />
+          <label for="isPublicClient">Public Client (no client secret)</label>
         </div>
 
-        <button onclick="generateMarkdown()">Generate Docs</button>
-    </div>
+        <button type="submit">Generate Docs</button>
+      </form>
+    </section>
 
-    <div id="output"></div>
+    <section id="outputSection">
+      <h2>Generated Markdown</h2>
+      <pre id="output"></pre>
+    </section>
+  </main>
 
-    <script src="script.js"></script>
+  <script src="static/js/script.js"></script>
 </body>
 </html>
