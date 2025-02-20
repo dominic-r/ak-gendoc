@@ -120,11 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
     return `---
   title: Integrate with ${integrationName}
   sidebar_label: ${integrationName}
+  support_level: ${supportLevel}
   ---
-  
-  # Integrate with ${integrationName}
-  
-  <span class="badge badge--secondary">Support level: ${supportLevel}</span>
   
   ## What is ${integrationName}
   
