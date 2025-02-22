@@ -1,4 +1,4 @@
-/LICENSE /index.html 404
-/.github/* /index.html 404 
-/readme.txt /index.html 404
-/renovate.json /index.html 404
+/LICENSE /404.html 404
+/.github/* /404.html 404 
+/readme.txt /404.html 404
+/renovate.json /404.html 404
